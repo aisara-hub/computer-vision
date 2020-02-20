@@ -5,6 +5,7 @@ from mtcnn import MTCNN
 # streaming with flask - https://stackoverflow.com/questions/49939859/flask-video-stream-using-opencv-images
 # fix frame lag - https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
 # mtcnn detection - https://machinelearningmastery.com/how-to-perform-face-detection-with-classical-and-deep-learning-methods-in-python-with-keras/
+# multiple cameras - https://stackoverflow.com/questions/58592291/how-to-capture-multiple-camera-streams-with-opencv
 
 # face detector
 detector = MTCNN()
