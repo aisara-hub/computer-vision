@@ -1,3 +1,4 @@
 *env
 *.vscode
 *test_images
+*/*.pyc

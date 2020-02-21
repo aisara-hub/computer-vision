@@ -1,0 +1,44 @@
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>AiSSS</title>
+
+{% block body %}
+
+<body>
+    <div class="imgBackground">
+        <img src="{{url_for('static', filename='background.png')}}">
+        <form class="form-inline">   
+            <button class="fa fa-play" type="submit"> Play</button>
+            <button class="fa fa-pause"  type="submit"> Pause</button>
+            <button  class="fa fa-refresh" type="submit"> Playback</button>
+            <br>
+            <table class="tableCam">
+                <tr>
+                    <td><img src="{{ url_for('video_feed') }}"></td>
+                    <td><img src="{{ url_for('video_feed1') }}"></td>
+                </tr>
+                <tr>
+                    <td><img src="{{ url_for('video_feed2') }}"></td>
+                    <td><img src="{{ url_for('video_feed3') }}"></td>
+                </tr>
+            </table>  
+          </form>
+
+    <form class="form-right">
+            <div class="header">
+                <p class="information">Information</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                
+            </div>
+        </form>
+    </div>      
+</body>
+{% endblock %}

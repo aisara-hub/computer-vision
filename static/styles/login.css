@@ -1,0 +1,67 @@
+.username{
+    width: 250px;
+    padding: 12px 20px;
+    margin: 8px 80px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #008A9A;
+  }
+
+  .password{
+    width: 250px;
+    padding: 12px 20px;
+    margin: 8px 80px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #008A9A;
+    
+  }
+
+  .btnLogin {
+
+    background-color: #008A9A;
+    border: none;
+    color: white;
+    padding: 8px 32px;
+    text-align: center;
+    font-size: 12px;
+    margin: 4px 150px;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  
+  .btnLogin:hover {opacity: 0.6}
+
+  .home{
+      padding-top: 12%;
+      padding-left: 15%;
+      position: absolute;
+  }
+
+  .txtLogin{
+    font-family: Century Gothic;
+    font-size: 30px;
+    letter-spacing: 20px;
+    margin-left: 25%;
+  }
+
+  .txtName{
+    font-family: Century Gothic;
+    font-size: 15px;
+    letter-spacing: 2px;
+    margin-right: 60px;
+  }
+
+  .imgLogin{
+    position: relative;
+    margin-right: 0px;
+    float: right;
+  }
+
+  .imgHome{
+    width:500px;
+    height:650px;
+  }
