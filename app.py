@@ -2,9 +2,9 @@ from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, Response
 import os
 from camera import VideoCamera
-from camera import VideoCamera1
-from camera import VideoCamera2
-from camera import VideoCamera3
+# from camera import VideoCamera1
+# from camera import VideoCamera2
+# from camera import VideoCamera3
 
 app = Flask(__name__)
 
@@ -50,28 +50,27 @@ def login():
     return render_template('login.html', error=error)
 
 #Cam 1             
-@app.route('/video_feed')
-def video_feed():
-     return Response(gen(VideoCamera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+@app.route('/video_feed/<int:cam_id>')
+def video_feed(cam_id):
+     return Response(gen(VideoCamera(src=cam_id)),mimetype='multipart/x-mixed-replace; boundary=frame')
 
-#Cam 2
-@app.route('/video_feed1')
-def video_feed1():
-     return Response(gen(VideoCamera1()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+# #Cam 2
+# @app.route('/video_feed1')
+# def video_feed1():
+#      return Response(gen(VideoCamera1()),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-#Cam 3
-@app.route('/video_feed2')
-def video_feed2():
-     return Response(gen(VideoCamera2()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+# #Cam 3
+# @app.route('/video_feed2')
+# def video_feed2():
+#      return Response(gen(VideoCamera2()),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-#Cam 4
-@app.route('/video_feed3')
-def video_feed3():
-     return Response(gen(VideoCamera3()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+# #Cam 4
+# @app.route('/video_feed3')
+# def video_feed3():
+#      return Response(gen(VideoCamera3()),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame')
     
 
 if __name__ == "__main__":

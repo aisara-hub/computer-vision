@@ -1,8 +1,9 @@
+<html>
+<head>
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/dashboard.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <title>AiSSS</title>
-
-{% block body %}
+</head>
 
 <body>
     <div class="imgBackground">
@@ -14,31 +15,34 @@
             <br>
             <table class="tableCam">
                 <tr>
-                    <td><img src="{{ url_for('video_feed') }}"></td>
-                    <td><img src="{{ url_for('video_feed1') }}"></td>
+                    <td><img src="{{ url_for('video_feed', cam_id=0) }}"></td>
+                    <td><img src="{{ url_for('video_feed', cam_id=1) }}"></td>
                 </tr>
                 <tr>
-                    <td><img src="{{ url_for('video_feed2') }}"></td>
-                    <td><img src="{{ url_for('video_feed3') }}"></td>
+                    <td><img src="{{ url_for('video_feed', cam_id=2) }}"></td>
+                    <td><img src="{{ url_for('video_feed', cam_id=3) }}"></td>
                 </tr>
             </table>  
           </form>
 
-    <form class="form-right">
+        <form class="form-right">
             <div class="header">
                 <p class="information">Information</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
-                <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                <div id="logs">
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>
+                    <p> ! 12.10.52 Feb 12 2020   Issyam signed in</p>    
+                </div>
+                
                 
             </div>
         </form>
     </div>      
 </body>
-{% endblock %}
+</html>
