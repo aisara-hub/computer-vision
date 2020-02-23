@@ -49,29 +49,11 @@ def login():
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
 
-#Cam 1             
+#Cam 1,2,3,4             
 @app.route('/video_feed/<int:cam_id>')
 def video_feed(cam_id):
      return Response(gen(VideoCamera(src=cam_id)),mimetype='multipart/x-mixed-replace; boundary=frame')
 
-# #Cam 2
-# @app.route('/video_feed1')
-# def video_feed1():
-#      return Response(gen(VideoCamera1()),
-#                     mimetype='multipart/x-mixed-replace; boundary=frame')
-
-# #Cam 3
-# @app.route('/video_feed2')
-# def video_feed2():
-#      return Response(gen(VideoCamera2()),
-#                     mimetype='multipart/x-mixed-replace; boundary=frame')
-
-# #Cam 4
-# @app.route('/video_feed3')
-# def video_feed3():
-#      return Response(gen(VideoCamera3()),
-#                     mimetype='multipart/x-mixed-replace; boundary=frame')
-    
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
