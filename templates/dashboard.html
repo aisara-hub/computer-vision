@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <title>AiSSS</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>  
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <style>
@@ -19,7 +21,7 @@
     }
 </style>
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <br><br><br><br><br><br>
         <div class="row">
             <div class="col-6">
@@ -29,17 +31,33 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
-                <img style="width: inherit" src="{{ url_for('video_feed', cam_id=0) }}">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6">
+                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=0) }}">
+                    </div>
+                    <div class="col-6">
+                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=1) }}">
+                    </div>
+                    <div class="col-6">
+                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=2) }}">
+                    </div>
+                    <div class="col-6">
+                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=3) }}">
+                    </div>
+                </div>
             </div>
-            <div class="col-6">
-                <img style="width: inherit" src="{{ url_for('video_feed', cam_id=1) }}">
-            </div>
-            <div class="col-6">
-                <img style="width: inherit" src="{{ url_for('video_feed', cam_id=2) }}">
-            </div>
-            <div class="col-6">
-                <img style="width: inherit" src="{{ url_for('video_feed', cam_id=3) }}">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-6" id="capturedImagestest">
+                        <button class="btn btn-info"><i class="fa fa-play"></i> Image Logs</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col logtext" id="capturedImages">
+                        
+                    </div>
+                </div>
             </div>
         </div>
         <br>
@@ -61,7 +79,44 @@
         </div>
     </div>
      
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>  
+
+<script>
+    window.customdom = '';
+    function refreshstorage() {
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "{{configs.HOST_IP}}/storage",
+          "method": "GET",
+          "headers": {
+            "Accept": "*/*",
+          }
+        }
+
+        $.ajax(settings).done(function (response) {
+            $("#capturedImages").html("");
+            response.filelist.map(writetodom)
+        });
+    }
+    
+
+    function writetodom(filepath) {
+        customdom += '<div class="row">';
+            customdom += '<div class="col">';
+                customdom += '<img style="width: 60%" src="/{{configs.STORAGE_PATH}}/'+filepath+'.jpg">';
+            customdom += '</div>';
+            customdom += '<div class="col">';
+                customdom += '<p style="color:white">'+filepath+' </p>';
+            customdom += '</div>';
+            customdom += '<div class="col">';
+                customdom += '<p style="color:white">11:57 PM </p>';
+            customdom += '</div>';
+        customdom += '</div>';
+        $("#capturedImages").append(customdom);
+    }
+    
+    setTimeout(function(){ refreshstorage() }, 900);
+    
+</script>
 </body>
 </html>

@@ -37,7 +37,7 @@ class VideoCamera():
     def get_frame(self):
         _, image = self.video.read()
         # detect faces
-        print(type(image))
+        # print(type(image))
         try:
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             faces = faceCascade.detectMultiScale(gray, 1.2,5)
@@ -65,7 +65,7 @@ class VideoCamera():
             #if key == 'p':
             #   image = not image
         except Exception as e:
-            print("something happen:", e)
+            # print("something happen:", e)
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 

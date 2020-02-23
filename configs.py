@@ -2,9 +2,9 @@ import os
 RUNNER = "daus"
 # RUNNER = "chikeong"
 # RUNNER = "taufiq"
+HOST_IP = "http://localhost:5000"
 
-
-STORAGE_PATH = "storage"
+STORAGE_PATH = "static/storage"
 
 def assure_path_exists(path):
 	try:

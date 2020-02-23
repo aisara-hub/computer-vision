@@ -1,0 +1,26 @@
+
+
+<script>
+
+	var settings = {
+	  "async": true,
+	  "crossDomain": true,
+	  "url": "http://localhost:5000/storage",
+	  "method": "GET",
+	  "headers": {
+	    "User-Agent": "PostmanRuntime/7.20.1",
+	    "Accept": "*/*",
+	    "Cache-Control": "no-cache",
+	    "Postman-Token": "120d397c-33b7-4291-9888-43b04c8a6a9a,e0199ec2-6a28-4ede-80a4-4d34fcdd173f",
+	    "Host": "localhost:5000",
+	    "Accept-Encoding": "gzip, deflate",
+	    "Cookie": "PHPSESSID=081bd6b20d323573e814860223bf946b; csrftoken=wKDUz1tpCycMaVFxVZvGVkaBbR1dvsG76wCkot1rypw0PiUSCKhUv0HphhTdFoWf",
+	    "Connection": "keep-alive",
+	    "cache-control": "no-cache"
+	  }
+	}
+
+	$.ajax(settings).done(function (response) {
+	  console.log(response.filelist);
+	});
+</script>

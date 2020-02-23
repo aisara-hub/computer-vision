@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 import os
 from camerav3 import VideoCamera
 import directorymanagement
+import configs
 
 app = Flask(__name__)
 
@@ -25,7 +26,7 @@ def multi_gen(camera_id):
 
 @app.route('/dashboard')
 def home():
-	 return render_template('dashboard.html')
+	 return render_template('dashboard.html',configs = configs)
 	# if not session.get('logged_in'):
 	# 	return render_template('login.html')
 	# else:
