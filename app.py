@@ -1,10 +1,7 @@
-from flask import Flask
-from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, Response
+from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, Response, jsonify
 import os
-from camera import VideoCamera
-# from camera import VideoCamera1
-# from camera import VideoCamera2
-# from camera import VideoCamera3
+from camerav3 import VideoCamera
+import directorymanagement
 
 app = Flask(__name__)
 
@@ -53,6 +50,10 @@ def login():
 @app.route('/video_feed/<int:cam_id>')
 def video_feed(cam_id):
      return Response(gen(VideoCamera(src=cam_id)),mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/storage')
+def storage_files():
+    return jsonify({'filelist': directorymanagement.watch()})
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
