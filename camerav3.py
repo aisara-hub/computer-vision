@@ -56,9 +56,10 @@ class VideoCamera():
     def get_frame(self):
 
         _, image = self.video.read()
-        if not _:
-            self.video = cv2.VideoCapture(self.src)
-            _, image = self.video.read()
+        if configs.RUNNER == "taufiq":
+            if not _:
+                self.video = cv2.VideoCapture(self.src)
+                _, image = self.video.read()
 
         # detect faces
         # print(type(image))
