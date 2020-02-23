@@ -54,7 +54,7 @@ def login():
 def video_feed(cam_id):
      return Response(gen(VideoCamera(src=cam_id)),mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
 	app.run(debug=True,host='0.0.0.0')
+

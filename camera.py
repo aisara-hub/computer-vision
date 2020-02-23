@@ -9,12 +9,20 @@ import numpy as np
 
 # face detector
 detector = MTCNN()
-
+faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 class VideoCamera():
     '''
     Setup source for threading and streaming to flask
     '''
     def __init__(self, src=0):
+        if src == 0:
+            src = 'rtsp://admin:MJEVUD@192.168.0.8:554'
+        if src == 1:
+            src = 'rtsp://admin:MJEVUD@192.168.0.8:554'
+        if src == 2:
+            src = 'rtsp://admin:MJEVUD@192.168.0.8:554'
+        if src == 3:
+            src = 'rtsp://admin:MJEVUD@192.168.0.8:554'
         # default source from webcam (0), set source as needed
         self.video = cv2.VideoCapture(src)
     
@@ -26,13 +34,17 @@ class VideoCamera():
         # detect faces
         print(type(image))
         try:
-            faces = detector.detect_faces(image)
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            faces = faceCascade.detectMultiScale(gray, 1.2,5)
+            #faces = detector.detect_faces(image)
             # for faces detected, draw a box around it
-            for face in faces:
+            for (x,y,w,h) in faces:
                 # get coordinates
-                x1, y1, w, h = face['box']
+                #x1, y1, w, h = face['box']
                 # plot in frame
-                cv2.rectangle(image, (x1, y1), (x1+w, y1+h), (0, 0, 255), 2)
+                #cv2.rectangle(image, (x1, y1), (x1+w, y1+h), (0, 0, 255), 2)
+                #if using haarcascade
+                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
             # We are using Motion JPEG, but OpenCV defaults to capture raw images,
             # so we must encode it into JPEG in order to correctly display the
             # video stream.
