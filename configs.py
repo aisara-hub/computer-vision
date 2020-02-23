@@ -1,7 +1,7 @@
 import os 
-RUNNER = "daus"
+#RUNNER = "daus"
 # RUNNER = "chikeong"
-# RUNNER = "taufiq"
+RUNNER = "taufiq"
 
 
 STORAGE_PATH = "storage"
