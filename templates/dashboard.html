@@ -51,6 +51,7 @@
                 <div class="row">
                     <div class="col-6" id="capturedImagestest">
                         <button class="btn btn-info"><i class="fa fa-play"></i> Image Logs</button>
+                        <button class="btn btn-info" onclick="refreshstorage()"><i class="fa fa-play"></i> Refresh Logs</button>
                     </div>
                 </div>
                 <div class="row">
@@ -95,7 +96,7 @@
 
         $.ajax(settings).done(function (response) {
             $("#capturedImages").html("");
-            response.filelist.map(writetodom)
+            response.filelist.map(writetodom);
         });
     }
     
