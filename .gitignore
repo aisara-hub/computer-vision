@@ -2,7 +2,7 @@
 *.vscode
 *test_images
 */*.pyc
-camerav3Taufik.py
+camerav3.py
 pakAnggaFull_converted.mp4
 configs.py
 /__pycache__
