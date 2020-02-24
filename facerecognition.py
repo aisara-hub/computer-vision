@@ -5,47 +5,35 @@ import cv2
 
 from PIL import Image
 from numpy import asarray
-from mtcnn.mtcnn import MTCNN
+from mtcnn import MTCNN
 from tensorflow.keras.models import load_model,model_from_json
 import configs
 
-# Load pretrained Inception-ResNet-v1 model
-# Update model and weights path according to your working environment
+detector = MTCNN()
+class FaceRecog():
 
+    def __init__(self):
+        # Load pretrained Inception-ResNet-v1 model
+        # Update model and weights path according to your working environment
 
-
-
-
-class faceRecog():
-
-    def __init__(self, src=0):
         self.known_faces_encodings = []
         self.known_faces_ids = []
         model_path = "Models/Inception_ResNet_v1.json"
         weights_path = "Models/facenet_keras.h5"
         known_faces_path = "Face_database/"
-
+        mtcnn_detector = MTCNN()
         for filename in os.listdir(known_faces_path):
             print("load Keras Model")
-
-
             json_file = open(model_path, 'r')
             loaded_model_json = json_file.read()
             json_file.close()
             self.enc_model = model_from_json(loaded_model_json)
             self.enc_model.load_weights(weights_path)
 
-            self.mtcnn_detector = MTCNN()
-
-
-
-
-
-            # Detect faces
+            # Detect faces from image database to create vector based on keras model
             face = self.detect_face(known_faces_path + filename, normalize=True)
 
             # Compute face encodings
-
             feature_vector = self.enc_model.predict(face.reshape(1, 160, 160, 3))
             feature_vector /= np.sqrt(np.sum(feature_vector ** 2))
             self.known_faces_encodings.append(feature_vector)
@@ -56,8 +44,6 @@ class faceRecog():
 
         self.known_faces_encodings = np.array(self.known_faces_encodings).reshape(len(self.known_faces_encodings), 128)
         self.known_faces_ids = np.array(self.known_faces_ids)
-
-
 
     # Function to detect and extract face from a image
     def detect_face(self, filename, required_size=(160, 160), normalize=True):
@@ -70,7 +56,7 @@ class faceRecog():
         pixels = np.asarray(img)
 
         # detect faces in the image
-        results = self.mtcnn_detector.detect_faces(pixels)
+        results = detector.detect_faces(pixels)
 
         # extract the bounding box from the first face
         x1, y1, width, height = results[0]['box']
@@ -121,73 +107,22 @@ class faceRecog():
 
     # Function to perform real-time face recognition through a webcam
 
-    def face_recognition(self, mode, frame,detector='haar', threshold=0.75):
-        if detector == 'haar':
-            # Load the cascade
-            face_cascade = cv2.CascadeClassifier('Models/haarcascade_frontalface_default.xml')
-
-        if mode == 'stream':
-
-            # To capture webcam feed. Change argument for differnt webcams
-            self.frame = frame
-
-        elif mode == 'video':
-            # To capture video feed
-            self.frame = frame
-
-        #while True:
-
-        # Detect from frame
-        if detector == 'haar':
-
-            # Convert to grayscale
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-            # Detect the faces
-            faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-
-        elif detector == 'mtcnn':
-
-            results = self.mtcnn_detector.detect_faces(frame)
-
-            faces = []
-
-            for i in range(len(results)):
-                x, y, w, h = results[i]['box']
-                x, y = abs(x), abs(y)
-                faces.append([x, y, w, h])
-
-        # Draw the rectangle around each face and save
+    def face_recognition(self,faces, threshold=0.75):
         count = 0
-        for (x, y, w, h) in faces:
-            image = Image.fromarray(frame[y:y + h, x:x + w])
-            image = image.resize((160, 160))
-            face_array = asarray(image)
 
-            # Normalize
+        for face in faces:
+            face_array = asarray(face)
+            # Normalize face
             mean = np.mean(face_array, axis=(0, 1, 2), keepdims=True)
             std = np.std(face_array, axis=(0, 1, 2), keepdims=True)
-            std_adj = np.maximum(std, 1.0)
             face_array_normalized = (face_array - mean) / std
-
-            # Recognize
-            print("checking storage")
-            configs.assure_path_exists(configs.STORAGE_PATH)
-            count += 1
             label = self.recognize(face_array_normalized, self.known_faces_encodings, self.known_faces_ids, threshold)
             if label[0] != "UNKNOWN":
                 # Save the captured image into the datasets folder if detected face
                 print("saving to storage")
-                # if using haarcascade
-                # cv2.imwrite(configs.STORAGE_PATH+"/User_" + str(urandom(7).hex()) + '_' + str(count) + ".jpg", image[y:y+h,x:x+w])
+                cv2.imwrite(configs.STORAGE_PATH + "/%s_" % (label[0]) + str(urandom(7).hex()) + '_' + str(count) + ".jpg",face_array)
 
-                cv2.imwrite(configs.STORAGE_PATH + "/%s_" % (label[0]) + str(urandom(7).hex()) + '_' + str(count) + ".jpg",frame[y:y + h, x:x + w])
-                #put rectangle is not needed
-                """cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 0), 2)
-                cv2.putText(frame, label[0], (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)"""
 
-            # Display
-            #cv2.imshow('Face_Recognition', img)
 
 
 

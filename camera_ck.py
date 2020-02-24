@@ -5,6 +5,7 @@ import numpy as np
 import configs
 import tensorflow as tf
 from PIL import Image
+from facerecognition import FaceRecog
 
 # streaming with flask - https://stackoverflow.com/questions/49939859/flask-video-stream-using-opencv-images
 # fix frame lag - https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
@@ -13,7 +14,7 @@ from PIL import Image
 
 detector = MTCNN()
 faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
+recognizer = FaceRecog()
 class VideoCamera:
     '''
     Setup source for threading and streaming to flask
@@ -24,24 +25,22 @@ class VideoCamera:
             if src == 0:
                 self.src = 'rtsp://admin:MJEVUD@192.168.0.8:554/H.264'
             if src == 1:
-                self.src = 1
+                self.src = 'rtsp://admin:EJVCDI@192.168.0.11:554/H.264'
             if src == 2:
                 self.src = 2
             if src == 3:
                 self.src = 3
-            environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
         if configs.RUNNER == "daus":
             pass
         # default source from webcam (0), set source as needed
         self.video = cv2.VideoCapture(src)
-    
+
     def __del__(self):
         self.video.release()
     
     def extract_faces(self, image, x, y, w, h):
         im = Image.fromarray(image[y:y + h, x:x + w])
-        im = im.resize((160, 160))
-        face_array = Image.Image.getdata(im)
+        face_array = im.resize((160, 160))
         return face_array
     
     def mtcnn_faces(self, image):
@@ -79,7 +78,7 @@ class VideoCamera:
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
-        return jpeg
+        return jpeg, list_face
     
     def read_frames(self):
         # separate frame reading for threading
@@ -95,6 +94,7 @@ class VideoCamera:
         # choose detector (haar / mtcnn)
         jpeg, faces = self.mtcnn_faces(image)
 
-        print(faces)
+        #print(faces)
+        recognizer.face_recognition(faces, threshold=0.75)
 
         return jpeg.tobytes()
