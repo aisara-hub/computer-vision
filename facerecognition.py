@@ -12,44 +12,50 @@ import configs
 # Load pretrained Inception-ResNet-v1 model
 # Update model and weights path according to your working environment
 
-model_path = "Models/Inception_ResNet_v1.json"
-weights_path = "Models/facenet_keras.h5"
 
-json_file = open(model_path, 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-enc_model = model_from_json(loaded_model_json)
-enc_model.load_weights(weights_path)
-
-mtcnn_detector = MTCNN()
-
-known_faces_encodings = []
-known_faces_ids = []
-
-known_faces_path = "Face_database/"
 
 
 
 class faceRecog():
 
     def __init__(self, src=0):
+        self.known_faces_encodings = []
+        self.known_faces_ids = []
+        model_path = "Models/Inception_ResNet_v1.json"
+        weights_path = "Models/facenet_keras.h5"
+        known_faces_path = "Face_database/"
+
         for filename in os.listdir(known_faces_path):
             print("load Keras Model")
+
+
+            json_file = open(model_path, 'r')
+            loaded_model_json = json_file.read()
+            json_file.close()
+            self.enc_model = model_from_json(loaded_model_json)
+            self.enc_model.load_weights(weights_path)
+
+            self.mtcnn_detector = MTCNN()
+
+
+
+
+
             # Detect faces
             face = self.detect_face(known_faces_path + filename, normalize=True)
 
             # Compute face encodings
 
-            feature_vector = enc_model.predict(face.reshape(1, 160, 160, 3))
+            feature_vector = self.enc_model.predict(face.reshape(1, 160, 160, 3))
             feature_vector /= np.sqrt(np.sum(feature_vector ** 2))
-            known_faces_encodings.append(feature_vector)
+            self.known_faces_encodings.append(feature_vector)
 
             # Save Person IDs
             label = filename.split('.')[0]
-            known_faces_ids.append(label)
+            self.known_faces_ids.append(label)
 
-        self.known_faces_encodings = np.array(known_faces_encodings).reshape(len(known_faces_encodings), 128)
-        self.known_faces_ids = np.array(known_faces_ids)
+        self.known_faces_encodings = np.array(self.known_faces_encodings).reshape(len(self.known_faces_encodings), 128)
+        self.known_faces_ids = np.array(self.known_faces_ids)
 
 
 
@@ -64,7 +70,7 @@ class faceRecog():
         pixels = np.asarray(img)
 
         # detect faces in the image
-        results = mtcnn_detector.detect_faces(pixels)
+        results = self.mtcnn_detector.detect_faces(pixels)
 
         # extract the bounding box from the first face
         x1, y1, width, height = results[0]['box']
@@ -97,7 +103,7 @@ class faceRecog():
     def recognize(self, img, known_faces_encodings, known_faces_ids, threshold=0.75):
         scores = np.zeros((len(known_faces_ids), 1), dtype=float)
 
-        enc = enc_model.predict(img.reshape(1, 160, 160, 3))
+        enc = self.enc_model.predict(img.reshape(1, 160, 160, 3))
         enc /= np.sqrt(np.sum(enc ** 2))
 
         scores = np.sqrt(np.sum((enc - known_faces_encodings) ** 2, axis=1))
@@ -142,10 +148,7 @@ class faceRecog():
 
         elif detector == 'mtcnn':
 
-            results = mtcnn_detector.detect_faces(frame)
-
-            """if (len(results) == 0):
-                continue"""
+            results = self.mtcnn_detector.detect_faces(frame)
 
             faces = []
 
