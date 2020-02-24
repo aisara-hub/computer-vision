@@ -1,6 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, Response, jsonify
 import os
-from camerav3 import VideoCamera
+from camera_ck import VideoCamera
 import directorymanagement
 import configs
 
@@ -51,7 +51,7 @@ def login():
 #Cam 1,2,3,4             
 @app.route('/video_feed/<int:cam_id>')
 def video_feed(cam_id):
-     return Response(gen(VideoCamera(src=cam_id)),mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(VideoCamera(src=cam_id)),mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/storage')
 def storage_files():
@@ -59,5 +59,5 @@ def storage_files():
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
-	app.run(debug=True,host='0.0.0.0')
+	app.run(debug=True,host='0.0.0.0',threaded=True)
 
