@@ -82,6 +82,8 @@
      
 
 <script>
+    var dt = new Date();
+    dt.toLocaleDateString();
     window.customdom = '';
     function refreshstorage() {
         var settings = {
@@ -109,14 +111,15 @@
             customdom += '<div class="col">';
                 customdom += '<p style="color:white">'+filepath+' </p>';
             customdom += '</div>';
-            customdom += '<div class="col">';
-                customdom += '<p style="color:white">11:57 PM </p>';
+            customdom += '<div class="col" >';
+                customdom += '<p style="color:white">'+ dt + '</p>';
             customdom += '</div>';
         customdom += '</div>';
+
         $("#capturedImages").append(customdom);
     }
     
-    setTimeout(function(){ refreshstorage() }, 900);
+    setTimeout(function(){ refreshstorage() }, 100);
     
 </script>
 </body>
