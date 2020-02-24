@@ -5,6 +5,7 @@ import numpy as np
 import configs
 import tensorflow as tf
 from os import urandom, environ
+from facerecognition import faceRecog
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -30,6 +31,7 @@ if gpus:
 
 detector = MTCNN()
 faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+recognizer = faceRecog()
 class VideoCamera():
     '''
     Setup source for threading and streaming to flask
@@ -60,11 +62,12 @@ class VideoCamera():
             if not _:
                 self.video = cv2.VideoCapture(self.src)
                 _, image = self.video.read()
-
         # detect faces
         # print(type(image))
         try:
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            recognizer.face_recognition('stream', image , detector='haar',threshold=0.60)
+            #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            """gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             faces = faceCascade.detectMultiScale(gray, 1.2,5)
             #faces = detector.detect_faces(image)
             # for faces detected, draw a box around it
@@ -91,7 +94,7 @@ class VideoCamera():
             # video stream.
             #key = self.waitKey(20)
             #if key == 'p':
-            #   image = not image
+            #   image = not image"""
         except Exception as e:
             # print("something happen:", e)
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
