@@ -3,7 +3,7 @@ import os
 from camera_ck import VideoCamera
 import directorymanagement
 import configs
-
+import multiprocessing
 
 app = Flask(__name__)
 

@@ -4,6 +4,7 @@ from mtcnn import MTCNN
 import numpy as np
 import configs
 import tensorflow as tf
+from PIL import Image
 
 # streaming with flask - https://stackoverflow.com/questions/49939859/flask-video-stream-using-opencv-images
 # fix frame lag - https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
@@ -37,29 +38,42 @@ class VideoCamera:
     def __del__(self):
         self.video.release()
     
+    def extract_faces(self, image, x, y, w, h):
+        im = Image.fromarray(image[y:y + h, x:x + w])
+        im = im.resize((160, 160))
+        face_array = Image.Image.getdata(im)
+        return face_array
+    
     def mtcnn_faces(self, image):
         # using mtcnn to detect faces
+        list_face = []
         try:
             faces = detector.detect_faces(image)
             # for faces detected, draw a box around it
             for face in faces:
                 # get coordinates
-                x1, y1, w, h = face['box']
+                x, y, w, h = face['box']
+                # save each face to list
+                list_face.append(self.extract_faces(image, x, y, w, h))
                 # plot in frame
-                cv2.rectangle(image, (x1, y1), (x1+w, y1+h), (0, 0, 255), 2)
+                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                
         except Exception as e:
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
-        return jpeg
+        return jpeg, list_face
     
     def haar_faces(self, image):
         # using haar to detect faces
+        list_face = []
         try:
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             faces = faceCascade.detectMultiScale(gray, 1.2,5)
             # for faces detected, draw a box around it
-            for (x,y,w,h) in faces:
+            for (x, y, w, h) in faces:
+                # save each face to list
+                list_face.append(self.extract_faces(image, x, y, w, h))
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
         except Exception as e:
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
@@ -70,7 +84,7 @@ class VideoCamera:
     def read_frames(self):
         # separate frame reading for threading
         self.video.set(cv2.CAP_PROP_POS_FRAMES, int)
-        
+
     def get_frame(self):
         _, image = self.video.read()
         if configs.RUNNER == "taufiq":
@@ -79,6 +93,8 @@ class VideoCamera:
                 _, image = self.video.read()
         
         # choose detector (haar / mtcnn)
-        jpeg = self.haar_faces(image)
+        jpeg, faces = self.mtcnn_faces(image)
+
+        print(faces)
 
         return jpeg.tobytes()
