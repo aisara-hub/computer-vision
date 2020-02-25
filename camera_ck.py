@@ -7,6 +7,8 @@ import tensorflow as tf
 from PIL import Image
 from facerecognition import FaceRecog
 
+from datetime import datetime
+from os import urandom, environ
 # streaming with flask - https://stackoverflow.com/questions/49939859/flask-video-stream-using-opencv-images
 # fix frame lag - https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
 # mtcnn detection - https://machinelearningmastery.com/how-to-perform-face-detection-with-classical-and-deep-learning-methods-in-python-with-keras/
@@ -56,8 +58,10 @@ class VideoCamera:
                 list_face.append(self.extract_faces(image, x, y, w, h))
                 # plot in frame
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                
+                print("Date Time: ",datetime.now().timestamp())
+                self.save_image_to(image[y:y + h, x:x + w],timestamp=datetime.now().timestamp())
         except Exception as e:
+            print(e)
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
@@ -74,11 +78,15 @@ class VideoCamera:
                 # save each face to list
                 list_face.append(self.extract_faces(image, x, y, w, h))
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                print("Date Time: ",datetime.now().timestamp())
         except Exception as e:
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
         return jpeg, list_face
+    
+    def save_image_to(self,imageface,imagepath=configs.STORAGE_PATH,timestamp = datetime.now().timestamp()):
+        cv2.imwrite(imagepath+"/User_" + str(timestamp)  + ".jpg", imageface)
     
     def read_frames(self):
         # separate frame reading for threading
