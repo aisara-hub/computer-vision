@@ -11,7 +11,7 @@ def watch(folder_path=configs.STORAGE_PATH,fromtime = datetime.now().timestamp()
 		# fileList = [file.split('/')[-1].split('.')[0] for file in os.listdir (folder_path) if '.' in file]
 
 		# the new one
-		fileList = [file.split('/')[-1] for file in os.listdir (folder_path) if '.' in file]
+		fileList = [file.split('/')[-1] for file in os.listdir(folder_path) if '.' in file]
 		# print(fileList,fromtime,totime)
 		fileList_filtered_bydatetime = [filename for filename in fileList if (int(int(fromtime)/1000)<=int("".join(filename.split('.')[:-2]).split('_')[1])<=int(int(totime)/1000))]
 		# 1582598025

@@ -4,7 +4,7 @@ RUNNER = "daus"
 # RUNNER = "taufiq"
 HOST_IP = "http://localhost:5000"
 
-STORAGE_PATH = "static/storage"
+STORAGE_PATH = "static/unknown/"
 def assure_path_exists(path):
 	try:
 		dir = os.path.dirname(path)
