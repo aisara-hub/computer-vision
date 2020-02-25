@@ -4,17 +4,14 @@
 {% block body %}
 
 <form action="/" method="POST">
-    <div class="imgLogin">
-        <img src="{{url_for('static', filename='home.png')}}" class="imgHome">
-    </div>
-    
+     <img src="/static/logoindon.jpeg" class="logo">
+            <p class="txtLogo">Tentera Nasional Indonesia</p>
+   
     <div class="home">
-        <img style="margin-left: 10%" src="/static/logoindon.jpeg" alt="">
-        <p class="txtLogin">Login</p>
         <p class="txtName">Artificial Intelligence Security Surveillance System</p>
-        <input type="text" id="username" name="username" value="{{request.form.username}}" class="username" placeholder="Username">
+        <input type="text" id="username" name="username" value="{{request.form.username}}" class="username" placeholder="Nama Pengguna">
         <br>
-        <input type="password" id="password" name="password" value="{{request.form.password}}" class="password" placeholder="Password">
+        <input type="password" id="password" name="password" value="{{request.form.password}}" class="password" placeholder="Kata Laluan">
         <br>
         <button type="submit" class="btnLogin">Log in</button>
         
