@@ -6,3 +6,7 @@ camerav3.py
 pakAnggaFull_converted.mp4
 configs.py
 /__pycache__
+
+static/known/*
+static/unknown/*
+static/storage/*
