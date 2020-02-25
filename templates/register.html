@@ -1,0 +1,29 @@
+
+    <link rel="stylesheet" type="text/css" href="style\css\register.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>(Daftar)AiSSS</title>
+
+{% block body %}
+
+<form action="/register" method="POST">
+   <div class="logoBox">
+    <img src="Style\image\logo.png" class="logo">
+    <p class="txtLogo">Tentera Nasional Indonesia</p>
+    <p class="txtName">Artificial Intelligence Security Surveillance System</p>
+   </div>
+
+
+    <div class="faceCapture">
+
+    </div>
+
+    <div class="details">
+        <input type="text" class="name" placeholder="Nama">
+        <br>
+        <input type="text" class="numId" placeholder="Nombor ID">
+        <br>
+        <button class="btnSubmit">Daftar</button>
+    </div>
+</form>  
+
+{% endblock %}

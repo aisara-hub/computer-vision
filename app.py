@@ -48,6 +48,10 @@ def login():
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+   return render_template('register.html')
+
 #Cam 1,2,3,4             
 @app.route('/video_feed/<int:cam_id>')
 def video_feed(cam_id):
@@ -61,6 +65,11 @@ def storage_files():
     totime=request.args.get("to")
     print("time fileter",fromtime," : ",totime )
     return jsonify({'filelist': directorymanagement.watch(folder_path="static/unknown",fromtime=fromtime,totime=totime)})
+
+@app.route("/logout")
+def logout():
+    return redirect(url_for('login'))
+   #return render_template('login.html',configs = configs)
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)

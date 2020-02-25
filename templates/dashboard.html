@@ -23,17 +23,18 @@
 
 <body>
     <div class="container-fluid">
-        
+         <button type="button" class="btn btn-primary" style="margin-top: 2px"><a style="text-decoration: none; color:white" href="{{ url_for('register') }}">Daftar</a></button>
+        <button type="button" class="btn btn-primary" style="margin-top: 2px"><a style="text-decoration: none; color:white" href="{{ url_for('logout') }}">Log Keluar</a></button>
         <div class="row">
             <div class="col-6">
-                <img style=" width: 80px; height: 70px; margin-left: 100%" src="/static/logoindon.jpeg" alt="">
-                
+                <img style=" width: 80px; height: 70px; margin-left: 90%" src="/static/logoindon.jpeg" alt="">
                 <!-- <button class="btn btn-info" type="submit"><i class="fa fa-play"></i> Play</button>
                 <button class="btn btn-info"  type="submit"><i class="fa fa-pause"></i> Pause</button>
                 <button class="btn btn-info" type="submit"><i class="fa fa-refresh"></i> Playback</button> -->
             </div>
         </div>
         <div class="row">
+            <p style="margin-left: 40%;font-family: Century Gothic;font-size: 10px;letter-spacing: 1px">Tentera Nasional Indonesia</p>
             <p style="font-size: 22px; margin-left: 30%">Artificial Intelligence Security Surveillance System</p>
         </div>
         <div class="row">
@@ -58,10 +59,10 @@
 
 
                     <div class="col-5">
-                        <span style="color:white">TO : </span><input type="datetime-local" id="datetimefrom" name="datetimefrom">
+                        <span style="color:black">TO : </span><input type="datetime-local" id="datetimefrom" name="datetimefrom">
                     </div>
                     <div class="col-5">
-                        <span style="color:white">FROM : </span><input type="datetime-local" id="datetimeto" name="datetimeto">
+                        <span style="color:black">FROM : </span><input type="datetime-local" id="datetimeto" name="datetimeto">
                     </div>
                     <div class="col-2">
                         <button type="button" onclick="filterbydatetimestamp()" class="btn btn-primary">Filter</button>
@@ -72,7 +73,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col logtext" id="capturedImages">
+                    <div style="height: 375px; overflow-y: scroll; overflow-x: hidden" class="col logtext" id="capturedImages">
                     </div>
                 </div>
             </div>
@@ -120,13 +121,13 @@
 
     function writetodom(filepath) {
         customdom += '<div class="row">';
-            customdom += '<div class="col">';
-                customdom += '<img style="width: 60%" src="/static/unknown/'+filepath+'">';
+            customdom += '<div class="col-3">';
+                customdom += '<img style="width: inherit" src="/static/unknown/'+filepath+'">';
             customdom += '</div>';
-            customdom += '<div class="col">';
+            customdom += '<div class="col-6 p-0">';
                 customdom += '<p style="color:black">'+filepath+' </p>';
             customdom += '</div>';
-            customdom += '<div class="col" >';
+            customdom += '<div class="col-3" >';
                 customdom += '<p style="color:black">'+ dt + '</p>';
             customdom += '</div>';
         customdom += '</div>';
@@ -136,12 +137,6 @@
     function filterbydatetimestamp() {
         // body...
         console.log("filter iamges");
-        if (new Date($("#datetimeto").val()).getTime()) {
-            alert("plase enter your time")
-        }
-        if (new Date($("#datetimefrom").val()).getTime()) {
-            alert("plase enter your time")
-        }
         console.log("datetimeto : ",new Date($("#datetimeto").val()).getTime());
         console.log("datetimefrom : ",new Date($("#datetimefrom").val()).getTime());
         if ((new Date($("#datetimeto").val()).getTime()) && (new Date($("#datetimefrom").val()).getTime())) {
