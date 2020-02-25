@@ -55,9 +55,12 @@ def video_feed(cam_id):
 
 @app.route('/storage')
 def storage_files():
+    args = request.args
+    print(args)
     fromtime=request.args.get("fromtime")
-    totime=request.args.get("totime")
-    return jsonify({'filelist': directorymanagement.watch(fromtime=fromtime,totime=totime)})
+    totime=request.args.get("to")
+    print("time fileter",fromtime," : ",totime )
+    return jsonify({'filelist': directorymanagement.watch(folder_path="static/unknown",fromtime=fromtime,totime=totime)})
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)

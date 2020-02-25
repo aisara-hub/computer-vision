@@ -120,13 +120,13 @@
     function writetodom(filepath) {
         customdom += '<div class="row">';
             customdom += '<div class="col">';
-                customdom += '<img style="width: 60%" src="/{{configs.STORAGE_PATH}}/'+filepath+'.jpg">';
+                customdom += '<img style="width: 60%" src="/static/unknown/'+filepath+'">';
             customdom += '</div>';
             customdom += '<div class="col">';
-                customdom += '<p style="color:white">'+filepath+' </p>';
+                customdom += '<p style="color:black">'+filepath+' </p>';
             customdom += '</div>';
             customdom += '<div class="col" >';
-                customdom += '<p style="color:white">'+ dt + '</p>';
+                customdom += '<p style="color:black">'+ dt + '</p>';
             customdom += '</div>';
         customdom += '</div>';
 
@@ -135,9 +135,19 @@
     function filterbydatetimestamp() {
         // body...
         console.log("filter iamges");
+        if (new Date($("#datetimeto").val()).getTime()) {
+            alert("plase enter your time")
+        }
+        if (new Date($("#datetimefrom").val()).getTime()) {
+            alert("plase enter your time")
+        }
         console.log("datetimeto : ",new Date($("#datetimeto").val()).getTime());
         console.log("datetimefrom : ",new Date($("#datetimefrom").val()).getTime());
-        refreshstorage(new Date($("#datetimefrom").val()).getTime(),new Date($("#datetimeto").val()).getTime());
+        if ((new Date($("#datetimeto").val()).getTime()) && (new Date($("#datetimefrom").val()).getTime())) {
+            console.log("correct time")
+            refreshstorage(new Date($("#datetimefrom").val()).getTime(),new Date($("#datetimeto").val()).getTime());    
+        }
+        
     }
     // setTimeout(function(){ refreshstorage() }, 900);
     

@@ -8,6 +8,7 @@ from numpy import asarray
 from mtcnn import MTCNN
 from tensorflow.keras.models import load_model,model_from_json
 import configs
+from datetime import datetime
 
 detector = MTCNN()
 class FaceRecog():
@@ -106,6 +107,8 @@ class FaceRecog():
 
 
     # Function to perform real-time face recognition through a webcam
+    def save_image_to(self,imageface,known="UNKNOWN",imagepath=configs.STORAGE_PATH,timestamp = datetime.now().timestamp()):
+        cv2.imwrite(imagepath+"/"+known+"_" + str(timestamp)  + ".jpg", imageface)
 
     def face_recognition(self,faces, threshold=0.75):
         count = 0
@@ -120,7 +123,11 @@ class FaceRecog():
             if label[0] != "UNKNOWN":
                 # Save the captured image into the datasets folder if detected face
                 print("saving to storage")
-                cv2.imwrite(configs.STORAGE_PATH + "/%s_" % (label[0]) + str(urandom(7).hex()) + '_' + str(count) + ".jpg",face_array)
+
+                # cv2.imwrite(configs.STORAGE_PATH + "/%s_" % (label[0]) + str(urandom(7).hex()) + '_' + str(count) + ".jpg",face_array)
+                self.save_image_to(face_array,imagepath="static/known",known=label[0],timestamp=datetime.now().timestamp())
+            else:
+                self.save_image_to(face_array,imagepath="static/unknown",timestamp=datetime.now().timestamp())
 
 
 

@@ -17,6 +17,7 @@ from os import urandom, environ
 detector = MTCNN()
 faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 recognizer = FaceRecog()
+
 class VideoCamera:
     '''
     Setup source for threading and streaming to flask
@@ -36,6 +37,7 @@ class VideoCamera:
             pass
         # default source from webcam (0), set source as needed
         self.video = cv2.VideoCapture(src)
+        self.global_timestamp = datetime.now().timestamp()
 
     def __del__(self):
         self.video.release()
@@ -58,10 +60,10 @@ class VideoCamera:
                 list_face.append(self.extract_faces(image, x, y, w, h))
                 # plot in frame
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                print("Date Time: ",datetime.now().timestamp())
-                self.save_image_to(image[y:y + h, x:x + w],timestamp=datetime.now().timestamp())
+                # print("Date Time: ",datetime.now().timestamp())
+                # self.save_image_to(image[y:y + h, x:x + w],timestamp=datetime.now().timestamp())
         except Exception as e:
-            print(e)
+            print("chi keong: ",e)
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
@@ -103,6 +105,23 @@ class VideoCamera:
         jpeg, faces = self.mtcnn_faces(image)
 
         #print(faces)
-        recognizer.face_recognition(faces, threshold=0.75)
-
+        # recognizer.face_recognition(faces, threshold=0.75)
+        # chikeong
+        # if (global_timestamp - datetime.now().timestamp()) < -1:
+        #     global_timestamp += 1
+        #     Mis_chikeong(face=faces)
+        # neo
+        print(self.global_timestamp)
+        if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
+            self.global_timestamp += 1
+            Mis_chikeong(face=faces)
         return jpeg.tobytes()
+
+class Mis_chikeong():
+    """docstring for ClassName"""
+    def __init__(self, face):
+        self.face = face      
+        self.recognize_this()
+    def recognize_this(self):
+        recognizer.face_recognition(self.face, threshold=0.75)
+
