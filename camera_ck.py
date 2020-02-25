@@ -108,5 +108,5 @@ class Recogniser():
     
     def recognize_this(self):
         # define the recogniser function here
-        recognizer.face_recognition(self.face, threshold=0.75)
+        recognizer.face_recognition(self.face, threshold=0.95)
 
