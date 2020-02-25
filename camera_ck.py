@@ -6,9 +6,9 @@ import configs
 import tensorflow as tf
 from PIL import Image
 from facerecognition import FaceRecog
-
 from datetime import datetime
 from os import urandom, environ
+
 # streaming with flask - https://stackoverflow.com/questions/49939859/flask-video-stream-using-opencv-images
 # fix frame lag - https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
 # mtcnn detection - https://machinelearningmastery.com/how-to-perform-face-detection-with-classical-and-deep-learning-methods-in-python-with-keras/
@@ -43,6 +43,7 @@ class VideoCamera:
         self.video.release()
     
     def extract_faces(self, image, x, y, w, h):
+        # extract face from image with given coordinates
         im = Image.fromarray(image[y:y + h, x:x + w])
         face_array = im.resize((160, 160))
         return face_array
@@ -60,10 +61,7 @@ class VideoCamera:
                 list_face.append(self.extract_faces(image, x, y, w, h))
                 # plot in frame
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                # print("Date Time: ",datetime.now().timestamp())
-                # self.save_image_to(image[y:y + h, x:x + w],timestamp=datetime.now().timestamp())
         except Exception as e:
-            print("chi keong: ",e)
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
@@ -80,48 +78,35 @@ class VideoCamera:
                 # save each face to list
                 list_face.append(self.extract_faces(image, x, y, w, h))
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                print("Date Time: ",datetime.now().timestamp())
         except Exception as e:
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
         return jpeg, list_face
     
-    def save_image_to(self,imageface,imagepath=configs.STORAGE_PATH,timestamp = datetime.now().timestamp()):
-        cv2.imwrite(imagepath+"/User_" + str(timestamp)  + ".jpg", imageface)
-    
-    def read_frames(self):
-        # separate frame reading for threading
-        self.video.set(cv2.CAP_PROP_POS_FRAMES, int)
-
     def get_frame(self):
         _, image = self.video.read()
         if configs.RUNNER == "taufiq":
             if not _:
                 self.video = cv2.VideoCapture(self.src)
                 _, image = self.video.read()
-        
         # choose detector (haar / mtcnn)
         jpeg, faces = self.mtcnn_faces(image)
-
-        #print(faces)
-        # recognizer.face_recognition(faces, threshold=0.75)
-        # chikeong
-        # if (global_timestamp - datetime.now().timestamp()) < -1:
-        #     global_timestamp += 1
-        #     Mis_chikeong(face=faces)
-        # neo
-        print(self.global_timestamp)
+        # perform recogniser and save every second
         if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
             self.global_timestamp += 1
-            Mis_chikeong(face=faces)
+            Recogniser(face=faces)
         return jpeg.tobytes()
 
-class Mis_chikeong():
-    """docstring for ClassName"""
+class Recogniser():
+    '''
+    separate out facial recogniser 
+    '''
     def __init__(self, face):
         self.face = face      
         self.recognize_this()
+    
     def recognize_this(self):
+        # define the recogniser function here
         recognizer.face_recognition(self.face, threshold=0.75)
 
