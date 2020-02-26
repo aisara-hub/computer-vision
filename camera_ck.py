@@ -74,6 +74,7 @@ class VideoCamera:
                 # plot in frame
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
         except Exception as e:
+            print(e)
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         _, jpeg = cv2.imencode('.jpg', image)
@@ -90,6 +91,7 @@ class VideoCamera:
                 # save each face to list
                 list_face.append(self.extract_faces(image, x, y, w, h))
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                print("Date Time: ",datetime.now().timestamp())
         except Exception as e:
             img = cv2.imread("static/background.png")   # reads an image in the BGR format
             image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -97,7 +99,7 @@ class VideoCamera:
         return jpeg, list_face
     
     def get_frame(self):
-        # normal - without multithreading
+        # # normal - without multithreading
         # _, image = self.video.read()
         # if configs.RUNNER == "taufiq":
         #     if not _:
