@@ -1,4 +1,4 @@
-import cv2
+import cv2, time
 from threading import Thread
 from mtcnn import MTCNN
 import numpy as np
@@ -38,6 +38,18 @@ class VideoCamera:
         # default source from webcam (0), set source as needed
         self.video = cv2.VideoCapture(src)
         self.global_timestamp = datetime.now().timestamp()
+        # start thread to read frames from video stream
+        _, self.image = self.video.read()
+        self.thread = Thread(target=self.update, args=())
+        self.thread.daemon = True
+        self.thread.start()
+    
+    def update(self):
+        # Read the next frame from the stream in a different thread
+        while True:
+            if self.video.isOpened():
+                (_, self.image) = self.video.read()
+            time.sleep(.01)
 
     def __del__(self):
         self.video.release()
@@ -85,13 +97,16 @@ class VideoCamera:
         return jpeg, list_face
     
     def get_frame(self):
-        _, image = self.video.read()
-        if configs.RUNNER == "taufiq":
-            if not _:
-                self.video = cv2.VideoCapture(self.src)
-                _, image = self.video.read()
-        # choose detector (haar / mtcnn)
-        jpeg, faces = self.mtcnn_faces(image)
+        # normal - without multithreading
+        # _, image = self.video.read()
+        # if configs.RUNNER == "taufiq":
+        #     if not _:
+        #         self.video = cv2.VideoCapture(self.src)
+        #         _, image = self.video.read()
+        # # choose detector (haar / mtcnn)
+        # jpeg, faces = self.mtcnn_faces(image)
+        # with multithreading 
+        jpeg, faces = self.mtcnn_faces(self.image)
         # perform recogniser and save every second
         if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
             self.global_timestamp += 1

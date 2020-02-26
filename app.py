@@ -3,7 +3,7 @@ import os
 from camera_ck import VideoCamera
 import directorymanagement
 import configs
-import multiprocessing
+import time
 
 app = Flask(__name__)
 
@@ -27,14 +27,19 @@ def multi_gen(camera_id):
 
 @app.route('/dashboard')
 def home():
-	 return render_template('dashboard.html',configs = configs)
+	return render_template('dashboard.html',configs = configs)
 	# if not session.get('logged_in'):
 	# 	return render_template('login.html')
 	# else:
 	#	return "You're logged in"
 def gen(camera):
+    times = []
     while True:
+        start = time.perf_counter()
         frame = camera.get_frame()
+        finish = time.perf_counter()
+        times.append(finish-start)
+        print(f"average processed in {sum(times)/len(times)} seconds" )
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -50,7 +55,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-   return render_template('register.html')
+    return render_template('register.html')
 
 #Cam 1,2,3,4             
 @app.route('/video_feed/<int:cam_id>')
@@ -69,7 +74,7 @@ def storage_files():
 @app.route("/logout")
 def logout():
     return redirect(url_for('login'))
-   #return render_template('login.html',configs = configs)
+    #return render_template('login.html',configs = configs)
 
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
