@@ -34,9 +34,10 @@ class VideoCamera:
             if src == 3:
                 self.src = 3
         if configs.RUNNER == "daus":
+            self.src = src
             pass
         # default source from webcam (0), set source as needed
-        self.video = cv2.VideoCapture(src)
+        self.video = cv2.VideoCapture(self.src)
         self.global_timestamp = datetime.now().timestamp()
         # start thread to read frames from video stream
         _, self.image = self.video.read()
@@ -50,6 +51,7 @@ class VideoCamera:
             if self.video.isOpened():
                 (_, self.image) = self.video.read()
             time.sleep(.01)
+
 
     def __del__(self):
         self.video.release()
@@ -107,23 +109,33 @@ class VideoCamera:
         #         _, image = self.video.read()
         # # choose detector (haar / mtcnn)
         # jpeg, faces = self.mtcnn_faces(image)
-        # with multithreading 
+        # with multithreading
+        # use haar cascade
         jpeg, faces = self.mtcnn_faces(self.image)
+        #jpeg, faces = self.mtcnn_faces(self.image)
         # perform recogniser and save every second
         if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
             self.global_timestamp += 1
-            Recogniser(face=faces)
+            #Recogniser(faces=faces)
         return jpeg.tobytes()
 
 class Recogniser():
     '''
     separate out facial recogniser 
     '''
-    def __init__(self, face):
-        self.face = face      
-        self.recognize_this()
-    
-    def recognize_this(self):
-        # define the recogniser function here
-        recognizer.face_recognition(self.face, threshold=0.95)
+    def __init__(self, faces):
+        self.faces = faces
+        self.thread = Thread(target=self.update_recogniser, args=())
+        self.thread.daemon = True
+        self.thread.start()
+        # define the recognise
 
+    def recognize_this(self):
+        #recognizer function here
+        recognizer.face_recognition_thread(self.faces)
+
+    def update_recogniser(self):
+        # Read the next frame from the stream in a different thread
+        if self.faces is not None:
+            self.recognize_this()
+        time.sleep(.01)
