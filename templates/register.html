@@ -1,14 +1,15 @@
 
-    <link rel="stylesheet" type="text/css" href="style\css\register.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/register.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>(Daftar)AiSSS</title>
 
 {% block body %}
 
 <form action="/register" method="POST">
+    <!--<button type="button" class="btn btn-primary" style="margin-top: 2px"><a style="text-decoration: none; color:white" href="{{ url_for('home') }}">Kembali</a></button>-->
    <div class="logoBox">
-    <img src="Style\image\logo.png" class="logo">
-    <p class="txtLogo">Tentera Nasional Indonesia</p>
+    <img src="/static/logoindon.jpeg" class="logo">
+    <p class="txtLogo">Tentara Nasional Indonesia</p>
     <p class="txtName">Artificial Intelligence Security Surveillance System</p>
    </div>
 
