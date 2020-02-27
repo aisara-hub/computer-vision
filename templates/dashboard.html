@@ -37,20 +37,20 @@
             <p style="margin-left: 40%;font-family: Century Gothic;font-size: 10px;letter-spacing: 1px">Tentara Nasional Indonesia</p>
             <p style="font-size: 22px; margin-left: 30%">Artificial Intelligence Security Surveillance System</p>
         </div>
-        <div class="row">
+        <div class="row" >
             <div class="col-8">
-                <div class="row">
-                    <div class="col-6">
-                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=0) }}">
+                <div class="row" >
+                    <div class="col-6" style="border: solid 1px black">
+                        <label>Camera 1</label><img style="width: inherit" src="{{ url_for('video_feed', cam_id=0) }}">
                     </div>
-                    <div class="col-6">
-                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=1) }}">
+                    <div class="col-6"style="border: solid 1px black">
+                        <label>Camera 2</label><img style="width: inherit" src="{{ url_for('video_feed', cam_id=1) }}">
                     </div>
-                    <div class="col-6">
-                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=2) }}">
+                    <div class="col-6" style="border: solid 1px black">
+                        <label>Camera 3</label><img style="width: inherit" src="{{ url_for('video_feed', cam_id=2) }}">
                     </div>
-                    <div class="col-6">
-                        <img style="width: inherit" src="{{ url_for('video_feed', cam_id=3) }}">
+                    <div class="col-6" style="border: solid 1px black">
+                        <label>Camera 4</label><img style="width: inherit" src="{{ url_for('video_feed', cam_id=3) }}">
                     </div>
                 </div>
             </div>
