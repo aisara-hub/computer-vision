@@ -5,6 +5,34 @@ from mtcnn import MTCNN
 detector = MTCNN()
 faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
+def detect_mtcnn(frame):
+    # using mtcnn to detect faces
+    try:
+        faces = detector.detect_faces(frame)
+        # for faces detected, draw a box around it
+        for face in faces:
+            # get coordinates
+            x, y, w, h = face['box']
+            # plot in frame
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    except Exception as e:
+        img = cv2.imread("static/background.png")   # reads an image in the BGR format
+        frame = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    return frame
+
+def detect_haar(frame):
+    # using haar to detect faces
+    try:
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = faceCascade.detectMultiScale(gray, 1.2,5)
+        # for faces detected, draw a box around it
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    except Exception as e:
+        img = cv2.imread("static/background.png")   # reads an image in the BGR format
+        frame = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    return frame
+
 class Detector:
     def __init__(self, image):
         self.image = image
