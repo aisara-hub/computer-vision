@@ -2,7 +2,7 @@ import os
 from os import urandom
 import numpy as np
 import cv2
-
+from threading import Thread
 from PIL import Image
 from numpy import asarray
 from mtcnn import MTCNN
@@ -106,10 +106,16 @@ class FaceRecog():
     def save_image_to(self, imageface, known="UNKNOWN", imagepath=configs.STORAGE_PATH, timestamp=datetime.now().timestamp()):
         cv2.imwrite(imagepath+"/"+known+"_" + str(timestamp)  + ".jpg", imageface)
 
-    # Function to perform real-time face recognition through a webcam
-    def face_recognition(self, faces, threshold=0.75):
+    def face_recognition_thread(self, faces):
         for face in faces:
-            face_array = asarray(face)
+            self.face = face
+            self.thread = Thread(target=self.face_recognition, args=())
+            self.thread.daemon = True
+            self.thread.start()
+
+    # Function to perform real-time face recognition through a webcam
+    def face_recognition(self, threshold=0.95):
+            face_array = asarray(self.face)
             # Normalize face
             mean = np.mean(face_array, axis=(0, 1, 2), keepdims=True)
             std = np.std(face_array, axis=(0, 1, 2), keepdims=True)
