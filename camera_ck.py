@@ -116,7 +116,7 @@ class VideoCamera:
         # perform recogniser and save every second
         if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
             self.global_timestamp += 1
-            #Recogniser(faces=faces)
+            Recogniser(faces=faces)
         return jpeg.tobytes()
 
 class Recogniser():
