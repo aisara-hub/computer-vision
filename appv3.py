@@ -30,7 +30,7 @@ def home():
 	# else:
 	#	return "You're logged in"
 def gen(camera):
-    return Task(source=camera).run()
+    return Task(source=camera).stream()
     #     frame = camera.get_frame()
     #     threadBoth().returnframe()
     #     yield (b'--frame\r\n'

@@ -1,23 +1,46 @@
 # libraries
 import cv2
 from concurrent.futures import ThreadPoolExecutor
-from facial_detectors import detect_mtcnn, detect_haar
+from threading import Thread
+from datetime import datetime
+
+from facial_detectors import detect_face, recog_face, Recogniser
+from checking import CountsPerSec, putIterationsPerSec
 import configs
 
-# function to parallalise
-def read(source):
-    _, frame = source.read()
-    return frame
+# setup reading frames for threading
+class VideoGet:
+    def __init__(self, src=0, detect_method="mtcnn"):
+        self.stream = cv2.VideoCapture(src)
+        self.grabbed = self.stream.read()[0]
+        self.detect = detect_method
+        if self.detect:
+            self.frame = detect_face(self.stream.read()[1], detect_method)
+        else:
+            self.frame = self.stream.read()[1]
+        self.stopped = False
+    
+    def start(self):    
+        Thread(target=self.get, args=()).start()
+        return self
+    
+    def get(self, detect_recog=True):
+        while not self.stopped:
+            if not self.grabbed:
+                self.stop()
+            else:
+                self.grabbed = self.stream.read()[0]
+                if self.detect:
+                    self.frame = detect_face(self.stream.read()[1])
+                else:
+                    self.frame = self.stream.read()[1]   
+    
+    def stop(self):
+        self.stopped = True
 
-def detect(frame, detector="haar"):
-    if detector == "mtcnn": 
-        frame = detect_mtcnn(frame)
-    elif detector == "haar":
-        frame = detect_haar(frame)
-    return frame
-
+# compiled task
 class Task:
-    def __init__(self, source, detect=True, recognise=True):
+    def __init__(self, source, detect_method='mtcnn'):
         print("initiating self: ",source)
         if configs.RUNNER == "taufiq":
             if source == 0:
@@ -32,18 +55,38 @@ class Task:
             self.source = source
             pass
         # default source from webcam (0), set source as needed
-        self.video = cv2.VideoCapture(self.source)
-        self.detect = detect
-        self.recognise = recognise
+        # self.video = cv2.VideoCapture(self.source)
+        self.video = VideoGet(self.source, detect_method).start()
+        self.detect_method = detect_method
+        self.global_timestamp = datetime.now().timestamp()
+        self.cps = CountsPerSec().start()
     
-    def run(self):
-        executor = ThreadPoolExecutor(max_workers=5)  
+    def stream(self):
+        # while True:
+        #     frame = self.video.frame
+        #     # frame = stream_detect(frame)
+        #     frame = putIterationsPerSec(frame, self.cps.countsPerSec())
+        #     self.cps.increment()
+        #     yield (b'--frame\r\n'
+        #         b'Content-Type: image/jpeg\r\n\r\n' +  cv2.imencode('.jpg', frame)[1].tobytes() + b'\r\n\r\n')
+        
         while True:
-            f_read = executor.submit(read, self.video)
-            frame = f_read.result()
-            if self.detect:
-                f_detect = executor.submit(detect, frame)
-                frame = f_detect.result()
+            frame = self.video.frame
+            frame = putIterationsPerSec(frame, self.cps.countsPerSec())
+            self.cps.increment()
+            # recogniser
+            if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
+                faces = recog_face(frame, self.detect_method)
+                self.global_timestamp += 1
+                Recogniser(faces=faces)
+            # return frame
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' +  cv2.imencode('.jpg', frame)[1].tobytes() + b'\r\n\r\n')
-        
+    
+    def recognise(self):
+        while True:
+            if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
+                frame = self.video.frame
+                faces = recog_face(frame, self.detect_method)
+                self.global_timestamp += 1
+                Recogniser(faces=faces)
