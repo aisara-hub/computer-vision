@@ -37,7 +37,7 @@ def detect_face(frame, detect_method="mtcnn"):
 
 def extract_faces(frame, x, y, w, h):
     # extract face from image with given coordinates
-    im = Image.fromarray(frame[y:y + h, x:x + w])
+    im = Image.fromarray(frame[abs(y):y + h, abs(x):x + w])
     face_array = im.resize((160, 160))
     return face_array
 
