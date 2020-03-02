@@ -78,7 +78,7 @@ class Task:
             if (int(self.global_timestamp)-int(datetime.now().timestamp())) <0:
                 faces = recog_face(frame, self.detect_method)
                 self.global_timestamp += 1
-                Recogniser(faces=faces)
+                Recogniser(list_faces=faces)
             # return frame
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' +  cv2.imencode('.jpg', frame)[1].tobytes() + b'\r\n\r\n')
@@ -89,4 +89,4 @@ class Task:
                 frame = self.video.frame
                 faces = recog_face(frame, self.detect_method)
                 self.global_timestamp += 1
-                Recogniser(faces=faces)
+                Recogniser(list_faces=faces)

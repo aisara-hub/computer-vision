@@ -1,16 +1,18 @@
 # libraries
 import cv2
 import time
+import numpy as np
 from mtcnn import MTCNN
 from threading import Thread
 from PIL import Image
 
-from facerecognition import FaceRecog
+# from facerecognition import FaceRecog
+from facenet_recogniser import PredictingFaces
 
 detector = MTCNN()
 faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-recognizer = FaceRecog()
-
+# recognizer = FaceRecog()
+recognizer = PredictingFaces()
 
 def detect_face(frame, detect_method="mtcnn"):
     try:
@@ -38,7 +40,8 @@ def detect_face(frame, detect_method="mtcnn"):
 def extract_faces(frame, x, y, w, h):
     # extract face from image with given coordinates
     im = Image.fromarray(frame[abs(y):y + h, abs(x):x + w])
-    face_array = im.resize((160, 160))
+    im = im.resize((160, 160))
+    face_array = np.asarray(im)
     return face_array
 
 def recog_face(frame, detect_method='mtcnn'):
@@ -57,23 +60,27 @@ def recog_face(frame, detect_method='mtcnn'):
             list_faces.append(extract_faces(frame, x, y, w, h))
     return list_faces
 
-class Recogniser:
-    '''
-    separate out facial recogniser 
-    '''
-    def __init__(self, faces):
-        self.faces = faces
-        self.thread = Thread(target=self.update_recogniser, args=())
-        self.thread.daemon = True
-        self.thread.start()
-        # define the recognise
+def Recogniser(list_faces):
+    for face in list_faces:
+        recognizer.predict_face_distance(face)
 
-    def recognize_this(self):
-        #recognizer function here
-        recognizer.face_recognition_thread(self.faces)
+# class Recogniser:
+#     '''
+#     separate out facial recogniser 
+#     '''
+#     def __init__(self, faces):
+#         self.faces = faces
+#         self.thread = Thread(target=self.update_recogniser, args=())
+#         self.thread.daemon = True
+#         self.thread.start()
+#         # define the recognise
 
-    def update_recogniser(self):
-        # Read the next frame from the stream in a different thread
-        if self.faces is not None:
-            self.recognize_this()
-        time.sleep(.01)
+#     def recognize_this(self):
+#         #recognizer function here
+#         recognizer.face_recognition_thread(self.faces)
+
+#     def update_recogniser(self):
+#         # Read the next frame from the stream in a different thread
+#         if self.faces is not None:
+#             self.recognize_this()
+#         time.sleep(.01)
