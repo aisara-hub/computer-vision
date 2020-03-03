@@ -33,13 +33,13 @@ def home():
 	# else:
 	#	return "You're logged in"
 def gen(camera):
-    times = []
+    # times = []
     while True:
-        start = time.perf_counter()
+        # start = time.perf_counter()
         frame = camera.get_frame()
-        finish = time.perf_counter()
-        times.append(finish-start)
-        print(f"average processed in {sum(times)/len(times)} seconds" )
+        # finish = time.perf_counter()
+        # times.append(finish-start)
+        # print(f"average processed in {sum(times)/len(times)} seconds" )
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 

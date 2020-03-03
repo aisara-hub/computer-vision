@@ -52,8 +52,14 @@ class Task:
             if source == 3:
                 self.src = 3
         if configs.RUNNER == "daus":
-            self.source = source
-            pass
+            if source == 0:
+                self.source = 0
+            if source == 1:
+                self.source = "rtsp://192.168.0.5:8080/video/h264"
+            if source == 2:
+                self.source = 2
+            if source == 3:
+                self.src = 3
         # default source from webcam (0), set source as needed
         # self.video = cv2.VideoCapture(self.source)
         self.video = VideoGet(self.source, detect_method).start()
