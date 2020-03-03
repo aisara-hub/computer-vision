@@ -60,9 +60,16 @@ def recog_face(frame, detect_method='mtcnn'):
             list_faces.append(extract_faces(frame, x, y, w, h))
     return list_faces
 
-def Recogniser(list_faces):
-    for face in list_faces:
-        recognizer.predict_face_distance(face)
+def Recogniser(face):
+    recognizer.predict_face_distance(face)
+
+def recognition_thread(faces):
+    for face in faces:
+        thread = Thread(target=Recogniser, args=(face,))
+        thread.daemon = True
+        thread.start()
+
+
 
 # class Recogniser:
 #     '''
