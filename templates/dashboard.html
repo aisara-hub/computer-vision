@@ -62,8 +62,8 @@
                 <div class="row">
 
                     <select id="change_custom" class="form-control">
-                        <option value="1">Known</option>
-                        <option value="2">Unknown</option>
+                        <option value="known">Known</option>
+                        <option value="unknown">Unknown</option>
                     </select>
 
                     <div class="col-5">
@@ -108,12 +108,11 @@
 <script>
     var dt = new Date();
     dt.toLocaleDateString();
-    window.customdom = '';
-    function refreshstorage(fromtime,totime) {
+    function refreshstorage(fromtime,totime,change_custom) {
         var settings = {
           "async": true,
           "crossDomain": true,
-          "url": "{{configs.HOST_IP}}/storage?fromtime="+fromtime+"&to="+totime,
+          "url": "{{configs.HOST_IP}}/storage?fromtime="+fromtime+"&to="+totime+"&change_custom="+change_custom,
           "method": "GET",
           "headers": {
             "Accept": "*/*",
@@ -121,17 +120,18 @@
         }
 
         $.ajax(settings).done(function (response) {
-            $("#capturedImages").html("");
+            $("#capturedImages").empty();
             response.filelist.map(writetodom);
         });
     }
-    
+
 
     function writetodom(filepath) {
+        window.customdom = '';
         customdom += '<div class="row">';
             customdom += '<div class="col-3">';
             
-                 if(document.getElementById("change_custom").value == '1')
+                 if(document.getElementById("change_custom").value == 'known')
                  {
                      customdom += '<img style="width: inherit" src="/static/known/'+filepath+'">';
                  }
@@ -143,7 +143,7 @@
             customdom += '</div>';
 
              customdom += '<div class="col-6 p-0">';
-                if(document.getElementById("change_custom").value == '1')
+                if(document.getElementById("change_custom").value == 'known')
                 {
                         customdom += '<p style="color:black">'+filepath+' </p>';
                     customdom += '</div>';
@@ -170,7 +170,7 @@
         console.log("datetimefrom : ",new Date($("#datetimefrom").val()).getTime());
         if ((new Date($("#datetimeto").val()).getTime()) && (new Date($("#datetimefrom").val()).getTime())) {
             console.log("correct time")
-            refreshstorage(new Date($("#datetimefrom").val()).getTime(),new Date($("#datetimeto").val()).getTime());    
+            refreshstorage(new Date($("#datetimefrom").val()).getTime(),new Date($("#datetimeto").val()).getTime(),new String($("#change_custom").val()));
         }
         
     }

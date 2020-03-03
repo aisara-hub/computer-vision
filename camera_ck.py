@@ -80,11 +80,12 @@ class VideoCamera:
         return jpeg.tobytes()
 
     def recognition(self):
-        score = self.compare_frame(self.previous_frame, self.current_frame)
-        if score < 0.9:
-            if (int(self.global_timestamp) - int(datetime.now().timestamp())) < 0:
-                faces = recog_face(self.frame, self.detect_method)
-                self.global_timestamp += 1
-                recognition_thread(faces)
+        if self.previous_frame is not None and self.current_frame is not None:
+            score = self.compare_frame(self.previous_frame, self.current_frame)
+            if score < 0.85:
+                if (int(self.global_timestamp) - int(datetime.now().timestamp())) < 0:
+                    faces = recog_face(self.frame, self.detect_method)
+                    self.global_timestamp += 1
+                    recognition_thread(faces)
 
 

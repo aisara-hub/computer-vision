@@ -66,10 +66,11 @@ def video_feed(cam_id):
 def storage_files():
     args = request.args
     print(args)
+    change_custom =request.args.get("change_custom")
     fromtime=request.args.get("fromtime")
     totime=request.args.get("to")
     print("time fileter",fromtime," : ",totime )
-    return jsonify({'filelist': directorymanagement.watch(folder_path="static/unknown",fromtime=fromtime,totime=totime)})
+    return jsonify({'filelist': directorymanagement.watch(folder_path="static/"+change_custom+"/", fromtime=fromtime,totime=totime)})
 
 @app.route("/logout")
 def logout():
