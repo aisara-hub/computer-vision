@@ -4,8 +4,11 @@ from camera_ck import VideoCamera
 import directorymanagement
 import configs
 import time
+from facenet_recogniser import ProcessingFace
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def multi_gen(camera_id):
 
@@ -52,6 +55,10 @@ def login():
         else:
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
+
+@app.route('/training')
+def training():
+    return ProcessingFace().save_face()
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

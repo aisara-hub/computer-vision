@@ -119,6 +119,7 @@ class ProcessingFace:
         in_encoder = Normalizer(norm='l2')
         trainX = in_encoder.transform(trainX)
         np.savez_compressed('faces-embeddings.npz', trainX, y)
+        return {'message':True}
 
 # 2. Build system for faces detected by system
 #       a. process face

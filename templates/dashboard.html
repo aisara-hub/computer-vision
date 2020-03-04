@@ -21,10 +21,18 @@
         .logtext>p{
             color:black;
         }
+        .gif-container {
+          background: url("https://media.tenor.com/images/6a5bcfba04e217d91f7aec29849ae208/tenor.gif") center;
+          background-size: cover;
+
+          height: 100%;
+          display: none;
+        }
     </style>
 </head>
 
 <body>
+    <div class="gif-container"></div>
     <div class="container-fluid">
          <button type="button" class="btn btn-primary" style="margin-top: 2px"><a style="text-decoration: none; color:white" href="{{ url_for('register') }}">Daftar</a></button>
         <button type="button" class="btn btn-primary" style="margin-top: 2px"><a style="text-decoration: none; color:white" href="{{ url_for('logout') }}">Log Keluar</a></button>
@@ -42,7 +50,7 @@
         </div>
         <div class="row" >
             <div class="col-8">
-                <button type="button" class="btn btn-primary" style="margin-bottom: 2px"><a style="text-decoration: none; color:white">Mula</a></button>
+                <button type="button" class="btn btn-primary" style="margin-bottom: 2px" onclick="trainthis()">Face Training</button>
                 <div class="row" >
                     <div class="col-6" style="border: solid 1px black">
                         <label>Camera 1</label><img style="width: inherit" src="{{ url_for('video_feed', cam_id=0) }}">
@@ -173,6 +181,27 @@
             refreshstorage(new Date($("#datetimefrom").val()).getTime(),new Date($("#datetimeto").val()).getTime(),new String($("#change_custom").val()));
         }
         
+    }
+    function trainthis(){
+        $(".gif-container").show()
+        console.log("beign traing")
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "{{configs.HOST_IP}}/training",
+          "method": "GET",
+          "headers": {
+            "Accept": "*/*",
+          }
+        }
+
+        $.ajax(settings).done(function (response) {
+            console.log("endpoint:",response);
+            // $("#capturedImages").empty();
+            // response.filelist.map(writetodom);
+            $(".gif-container").hide()
+            location.reload();
+        });
     }
     // setTimeout(function(){ refreshstorage() }, 900);
     
