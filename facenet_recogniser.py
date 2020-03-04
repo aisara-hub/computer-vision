@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
 from datetime import datetime
+import pathlib
 
 import configs
 
@@ -65,9 +66,16 @@ class ProcessingFace:
             path = subdir + filename
             # get face
             try:
+                # when u debug
+                # file = pathlib.Path(path)
+                # if file.exists ():
+                #     print ("File exist",file)
+                # else:
+                #     print ("File not exist")
                 face = self.processing_face(path)
                 faces.append(face)
             except Exception as e:
+                print(e)
                 pass
             # store
         return faces
@@ -79,8 +87,6 @@ class ProcessingFace:
         image = image.convert('RGB')
         # convert to array
         pixels = np.asarray(image)
-        # create the detector, using default weights
-        detector = MTCNN()
         # detect faces in the image
         results = detector.detect_faces(pixels)
         # extract the bounding box from the first face
@@ -180,7 +186,6 @@ class PredictingFaces:
     def saving_image(self, imageface, known="UNKNOWN", imagepath=configs.STORAGE_PATH, timestamp=datetime.now().timestamp()):
         # save the image, default saving to unknown faces
         cv2.imwrite(imagepath+"/"+known+"_" + str(timestamp)  + ".jpg", imageface)
-
 
     def predict_face_svm(self, face, threshold=0.5):
         # getting embeddings

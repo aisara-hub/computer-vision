@@ -41,8 +41,11 @@ class VideoCamera:
         self.detect_method = detect_method
         # start thread to read frames from video stream
         _, self.frame = self.stream.read()
-        #set initial empty array for previous frame in the first grabbed frame
-        self.previous_frame = np.zeros(self.frame.shape, dtype=np.uint8)
+        try:
+            #set initial empty array for previous frame in the first grabbed frame
+            self.previous_frame = np.zeros(self.frame.shape, dtype=np.uint8)
+        except Exception as e:
+            self.previous_frame = self.frame
         self.thread = Thread(target=self.update, args=())
         self.thread.daemon = True
         self.thread.start()
